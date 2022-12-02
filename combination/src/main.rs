@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 fn main() {
     let mut c = combination(1..=4, 1);
     println!("{}\n{c:?}\n", c.len());
@@ -27,7 +29,7 @@ fn main() {
     println!("{}\n{c:?}\n", c.len());
 }
 
-fn combination<I>(iter: I, n: i32) -> Vec<Vec<i32>>
+fn combination<I>(iter: I, n: usize) -> Vec<Vec<i32>>
 where
     I: Iterator<Item = i32>,
 {
@@ -39,12 +41,10 @@ where
             let mut t = seed[i].clone();
             t.push(num);
 
-            if t.len() == n as usize {
-                result.push(t.clone());
-            }
-
-            if t.len() < n as usize {
-                seed.push(t);
+            match t.len().cmp(&n) {
+                Ordering::Less => seed.push(t),
+                Ordering::Equal => result.push(t.clone()),
+                _ => (),
             }
         }
     }
